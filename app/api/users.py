@@ -5,8 +5,15 @@ from typing import List
 from app.core.database import get_db
 from app.models.user import User
 from app.models.schemas import UserCreate, UserUpdate, UserResponse, UserResponseWithRelations
+from passlib.context import CryptContext
+
 
 router = APIRouter(prefix="/users", tags=["users"])
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def hash_password(password: str) -> str:
+    return pwd_context.hash(password)
 
 @router.post("/", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
@@ -21,7 +28,7 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = User(
         name=user.name,
         email=user.email,
-        password= user.password,
+        password= hash_password(user.password),
         is_active=True
     )
     db.add(db_user)
