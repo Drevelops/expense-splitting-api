@@ -20,6 +20,13 @@ class Settings(BaseSettings):
     app_name: str = "Expense Splitting API"
     debug: bool = False
     
+    @property
+    def database_url(self) -> str:
+        """Build database URL from components or use direct URL"""
+        if self.DATABASE_URL:
+            return self.DATABASE_URL
+        return f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+    
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

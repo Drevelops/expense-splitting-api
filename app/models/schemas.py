@@ -1,7 +1,6 @@
-from typing import Optional
-from pydantic import BaseModel, Field, EmailStr
-from typing import List
 from __future__ import annotations
+from typing import Optional, List
+from pydantic import BaseModel, Field, EmailStr
 from enum import Enum
 
 class SplitMethod(str, Enum):
@@ -96,3 +95,7 @@ class ExpenseResponseWithRelations(ExpenseResponse):
     
     class Config:
         from_attributes = True
+
+UserResponseWithRelations.model_rebuild()
+BillResponse.model_rebuild()
+ExpenseResponseWithRelations.model_rebuild()
